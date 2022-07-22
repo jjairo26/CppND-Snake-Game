@@ -6,9 +6,11 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
-      random_h(0, static_cast<int>(grid_height - 1)) {
+      random_h(0, static_cast<int>(grid_height - 1)), gift{-1,-1}, random_foodcount(5,7){
+        // gift.x = -1, gift.y = -1 encode a non-available gift
+        // random_foodcount: every 5 to 7 foods: gift
   PlaceFood();
-  PlaceGift();
+  randomCount = random_foodcount(engine);
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -78,18 +80,25 @@ void Game::Update() {
   // Check if snake has reached the food
   if (food.x == new_x && food.y == new_y) {
     score++;
+    foodCount++;
     // new food position
     PlaceFood(); 
     // Grow snake and increase speed.
     snake.GrowBody();
     snake.speed += 0.02;
   }
-
+  
+  std::cout << "RandomCount: " << randomCount << "\n";
+  if ((foodCount%randomCount == 0) && foodCount != 0 && gift.x == -1 && gift.y == -1){
+    // new gift position
+     PlaceGift(); 
+  }
   // Check if snake has reached the gift
   if (gift.x == new_x && gift.y == new_y){
      score += 5;
-     // new gift position
-     PlaceGift(); 
+     EraseGift();
+     foodCount = 0;
+     randomCount = random_foodcount(engine); // Generate new random value for count for gift
      snake.speed += 0.02;
   }
 }
@@ -107,6 +116,11 @@ void Game::PlaceGift() {
       return;
     }
   }
+}
+
+void Game::EraseGift(){
+    gift.x = -1;
+    gift.y = -1;
 }
 
 int Game::GetScore() const { return score; }

@@ -81,7 +81,7 @@ void Renderer::Render(Snake const &snake, SDL_Point const &food, SDL_Point const
   }
   SDL_RenderFillRect(sdl_renderer, &block);
 
-  // Render gift
+  // Render gift to destination given by arguments 2-3 with dimensions given by arguments 4-5)
   renderTexture(giftTexture, gift.x * block.w, gift.y * block.h, (screen_width / grid_width), (screen_height / grid_height));
 
   // Update Screen
