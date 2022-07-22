@@ -41,11 +41,21 @@ Renderer::Renderer(const std::size_t screen_width,
   //Load gift PNG as texture
   std::string giftPNGpath = "../res/gift.png";
   giftTexture = loadTexture(giftPNGpath); 
+
+  //Initialize Font Library
+  TTF_Init();
+  font = TTF_OpenFont("../res/BOMBARD.ttf", 25);
+  if (font == nullptr){
+    std::cerr << "TTF Font could not be loaded.\n";
+    std::cerr << "TTF_Error: " << SDL_GetError() << "\n";
+	}
+
 }
 
 Renderer::~Renderer() {
   SDL_DestroyWindow(sdl_window);
   SDL_Quit();
+  TTF_Quit();
 }
 
 void Renderer::Render(Snake const &snake, SDL_Point const &food, SDL_Point const &gift) {
@@ -84,6 +94,10 @@ void Renderer::Render(Snake const &snake, SDL_Point const &food, SDL_Point const
   // Render gift to destination given by arguments 2-3 with dimensions given by arguments 4-5)
   renderTexture(giftTexture, gift.x * block.w, gift.y * block.h, (screen_width / grid_width), (screen_height / grid_height));
 
+  // Render Text
+  SDL_Color color = { 255, 255, 255 };
+  renderText("Hello World!", color, 12);
+
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
 }
@@ -110,4 +124,23 @@ void Renderer::renderTexture(SDL_Texture *texture, int x, int y, int w, int h){
 	dst.w = w;
 	dst.h = h;
 	SDL_RenderCopy(sdl_renderer, texture, NULL, &dst);
+}
+
+void Renderer::renderText(const std::string &message,	SDL_Color color, int fontSize)
+{
+	//TTF_RenderText -> Surface -> Texture
+	SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), color);
+	if (surf == nullptr){
+		TTF_CloseFont(font);
+		std::cerr << "Error in TTF_RenderText." << "\n";
+	}
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(sdl_renderer, surf);
+	if (texture == nullptr){
+		  std::cerr << "Error creating Texture from Surface." << "\n";
+	}
+	//Clean up the surface and font
+	SDL_FreeSurface(surf);
+	//return texture;
+	SDL_RenderCopy(sdl_renderer, texture, NULL, NULL);
+
 }

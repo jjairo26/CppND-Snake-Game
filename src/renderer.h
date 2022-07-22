@@ -3,6 +3,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 
 #include "snake.h"
 #include <string>
@@ -18,13 +19,15 @@ class Renderer {
 
   SDL_Texture* loadTexture(const std::string &file);
   void renderTexture(SDL_Texture *texture, int x, int y, int w, int h);
+  void renderText(const std::string &message,	SDL_Color color, int fontSize);
+
 
  private:
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
 
   SDL_Texture* giftTexture;
-  
+  TTF_Font* font;
 
 
   const std::size_t screen_width;
