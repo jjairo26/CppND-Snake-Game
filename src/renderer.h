@@ -22,6 +22,8 @@ class Renderer {
  private:
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
+
+  SDL_Texture* giftTexture;
   
 
 

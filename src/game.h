@@ -23,8 +23,7 @@ class Game {
  private:
   Snake snake;
   SDL_Point food;
-
-  //SDL_Texture* gift_tex;
+  SDL_Point gift;
 
   
   std::random_device dev;

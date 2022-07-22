@@ -37,6 +37,10 @@ Renderer::Renderer(const std::size_t screen_width,
 	  std::cerr << "IMG_Init could not be started.\n";
     std::cerr << "IMG_Error: " << IMG_GetError() << "\n";
   }
+
+  //Load gift PNG as texture
+  std::string giftPNGpath = "../res/gift.png";
+  giftTexture = loadTexture(giftPNGpath); 
 }
 
 Renderer::~Renderer() {
@@ -78,9 +82,7 @@ void Renderer::Render(Snake const &snake, SDL_Point const &food) {
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // Render gift
-  std::string giftPNGpath = "../res/gift.png";
-  SDL_Texture* giftTexture = loadTexture(giftPNGpath); 
-  renderTexture(giftTexture, 0, 0, 10, 10);
+  renderTexture(giftTexture, 20, 30, screen_width / grid_width, screen_height / grid_height);
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
