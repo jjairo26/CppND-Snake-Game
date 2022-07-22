@@ -31,6 +31,12 @@ Renderer::Renderer(const std::size_t screen_width,
     std::cerr << "Renderer could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
+
+  //Initialize PNG Loader
+  if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG){ //Bit Logic to see if Bit IMG_INIT_PNG is set
+	  std::cerr << "IMG_Init could not be started.\n";
+    std::cerr << "IMG_Error: " << IMG_GetError() << "\n";
+  }
 }
 
 Renderer::~Renderer() {
@@ -38,7 +44,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food) {
+void Renderer::Render(Snake const &snake, SDL_Point const &food) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -71,6 +77,11 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
   }
   SDL_RenderFillRect(sdl_renderer, &block);
 
+  // Render gift
+  std::string giftPNGpath = "../res/gift.png";
+  SDL_Texture* giftTexture = loadTexture(giftPNGpath); 
+  renderTexture(giftTexture, 0, 0, 10, 10);
+
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
 }
@@ -78,4 +89,23 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
 void Renderer::UpdateWindowTitle(int score, int fps) {
   std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
   SDL_SetWindowTitle(sdl_window, title.c_str());
+}
+
+SDL_Texture* Renderer::loadTexture(const std::string &file){
+	SDL_Texture *texture = IMG_LoadTexture(sdl_renderer, file.c_str());
+	if (texture == nullptr){
+		std::cerr << "Texture could not be loaded.\n";
+    std::cerr << " SDL_Error: " << SDL_GetError() << "\n";
+	}
+	return texture;
+}
+
+void Renderer::renderTexture(SDL_Texture *texture, int x, int y, int w, int h){
+	//Setup the destination rectangle position
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	dst.w = w;
+	dst.h = h;
+	SDL_RenderCopy(sdl_renderer, texture, NULL, &dst);
 }

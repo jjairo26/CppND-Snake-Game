@@ -85,3 +85,12 @@ void Game::Update() {
 
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
+
+/*SDL_Texture* Game::loadTexture(const std::string &file, SDL_Renderer *sdl_renderer){
+	SDL_Texture *texture = IMG_LoadTexture(sdl_renderer, file.c_str());
+	if (texture == nullptr){
+		std::cerr << "Texture could not be loaded.\n";
+    std::cerr << " SDL_Error: " << SDL_GetError() << "\n";
+	}
+	return texture;
+}*/
