@@ -16,9 +16,6 @@ class Game {
   int GetScore() const;
   int GetSize() const;
 
-  //SDL_Texture* getGiftTexture(){ return gift_tex; };
-  //SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *sdl_renderer);
-
 
  private:
   Snake snake;
@@ -35,6 +32,7 @@ class Game {
 
   void PlaceFood();
   void Update();
+  void PlaceGift();
 };
 
 #endif

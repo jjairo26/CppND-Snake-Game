@@ -8,6 +8,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
   PlaceFood();
+  PlaceGift();
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -25,7 +26,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, food, gift);
 
     frame_end = SDL_GetTicks();
 
@@ -65,6 +66,7 @@ void Game::PlaceFood() {
   }
 }
 
+
 void Game::Update() {
   if (!snake.alive) return;
 
@@ -73,24 +75,40 @@ void Game::Update() {
   int new_x = static_cast<int>(snake.head_x);
   int new_y = static_cast<int>(snake.head_y);
 
-  // Check if there's food over here
+  // Check if snake has reached the food
   if (food.x == new_x && food.y == new_y) {
     score++;
-    PlaceFood();
+    // new food position
+    PlaceFood(); 
     // Grow snake and increase speed.
     snake.GrowBody();
     snake.speed += 0.02;
+  }
+
+  // Check if snake has reached the gift
+  if (gift.x == new_x && gift.y == new_y){
+     score += 5;
+     // new gift position
+     PlaceGift(); 
+     snake.speed += 0.02;
+  }
+}
+
+void Game::PlaceGift() {
+  int x, y;
+  while (true) {
+    x = random_w(engine);
+    y = random_h(engine);
+    // Check that the location is not occupied by a snake item before placing
+    // Gift.
+    if (!snake.SnakeCell(x, y)) {
+      gift.x = x;
+      gift.y = y;
+      return;
+    }
   }
 }
 
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
 
-/*SDL_Texture* Game::loadTexture(const std::string &file, SDL_Renderer *sdl_renderer){
-	SDL_Texture *texture = IMG_LoadTexture(sdl_renderer, file.c_str());
-	if (texture == nullptr){
-		std::cerr << "Texture could not be loaded.\n";
-    std::cerr << " SDL_Error: " << SDL_GetError() << "\n";
-	}
-	return texture;
-}*/
