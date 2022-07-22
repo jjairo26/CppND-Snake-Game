@@ -44,7 +44,7 @@ Renderer::Renderer(const std::size_t screen_width,
 
   //Initialize Font Library
   TTF_Init();
-  font = TTF_OpenFont("../res/BOMBARD.ttf", 25);
+  font = TTF_OpenFont("../res/BOMBARD.ttf", 26); // File and FontSize
   if (font == nullptr){
     std::cerr << "TTF Font could not be loaded.\n";
     std::cerr << "TTF_Error: " << SDL_GetError() << "\n";
@@ -96,7 +96,8 @@ void Renderer::Render(Snake const &snake, SDL_Point const &food, SDL_Point const
 
   // Render Text
   SDL_Color color = { 255, 255, 255 };
-  renderText("Hello World!", color, 12);
+  SDL_Texture* textTexture = renderText("My C++ Snake Game", color);
+  renderTexture(textTexture, 0, 0);
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
@@ -126,10 +127,20 @@ void Renderer::renderTexture(SDL_Texture *texture, int x, int y, int w, int h){
 	SDL_RenderCopy(sdl_renderer, texture, NULL, &dst);
 }
 
-void Renderer::renderText(const std::string &message,	SDL_Color color, int fontSize)
+void Renderer::renderTexture(SDL_Texture *tex, int x, int y){
+	//Setup the destination rectangle
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	//Query the texture to get its width and height to use
+	SDL_QueryTexture(tex, NULL, NULL, &dst.w, &dst.h);
+	SDL_RenderCopy(sdl_renderer, tex, NULL, &dst);
+}
+
+SDL_Texture* Renderer::renderText(const std::string &message,	SDL_Color color)
 {
 	//TTF_RenderText -> Surface -> Texture
-	SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), color);
+	SDL_Surface *surf = TTF_RenderText_Solid(font, message.c_str(), color);
 	if (surf == nullptr){
 		TTF_CloseFont(font);
 		std::cerr << "Error in TTF_RenderText." << "\n";
@@ -140,7 +151,7 @@ void Renderer::renderText(const std::string &message,	SDL_Color color, int fontS
 	}
 	//Clean up the surface and font
 	SDL_FreeSurface(surf);
-	//return texture;
-	SDL_RenderCopy(sdl_renderer, texture, NULL, NULL);
+	return texture;
+	//SDL_RenderCopy(sdl_renderer, texture, NULL, NULL);
 
 }

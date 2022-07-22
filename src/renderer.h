@@ -19,7 +19,8 @@ class Renderer {
 
   SDL_Texture* loadTexture(const std::string &file);
   void renderTexture(SDL_Texture *texture, int x, int y, int w, int h);
-  void renderText(const std::string &message,	SDL_Color color, int fontSize);
+  void renderTexture(SDL_Texture *tex, int x, int y);
+  SDL_Texture* renderText(const std::string &message,	SDL_Color color);
 
 
  private:

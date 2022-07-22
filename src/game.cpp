@@ -88,7 +88,7 @@ void Game::Update() {
     snake.speed += 0.02;
   }
   
-  std::cout << "RandomCount: " << randomCount << "\n";
+  //std::cout << "RandomCount: " << randomCount << "\n";
   if ((foodCount%randomCount == 0) && foodCount != 0 && gift.x == -1 && gift.y == -1){
     // new gift position
      PlaceGift(); 
