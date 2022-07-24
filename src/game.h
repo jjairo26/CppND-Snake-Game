@@ -23,6 +23,7 @@ class Game {
   SDL_Point food;
   SDL_Point gift;
   int foodCount; // Used for triggering gifts as in Snake2
+  int giftTimeCounter; // Time Counter to make gift disappear
 
   
   std::random_device dev;
@@ -37,6 +38,7 @@ class Game {
   void Update();
   void PlaceGift();
   void EraseGift();
+  bool GiftExists();
 };
 
 #endif

@@ -89,9 +89,10 @@ void Game::Update() {
   }
   
   //std::cout << "RandomCount: " << randomCount << "\n";
-  if ((foodCount%randomCount == 0) && foodCount != 0 && gift.x == -1 && gift.y == -1){
+  if ((foodCount%randomCount == 0) && foodCount != 0 && !GiftExists()){
     // new gift position
-     PlaceGift(); 
+     PlaceGift();
+     giftTimeCounter = SDL_GetTicks();
   }
   // Check if snake has reached the gift
   if (gift.x == new_x && gift.y == new_y){
@@ -100,6 +101,15 @@ void Game::Update() {
      foodCount = 0;
      randomCount = random_foodcount(engine); // Generate new random value for count for gift
      snake.speed += 0.02;
+  }
+
+  if (GiftExists()){
+      int giftPassed = SDL_GetTicks() - giftTimeCounter;
+    // Make gift disappear after some time 
+      if (giftPassed >= 5000){ //milliseconds
+        EraseGift();
+        foodCount = 0;
+    }
   }
 }
 
@@ -123,6 +133,9 @@ void Game::EraseGift(){
     gift.y = -1;
 }
 
+bool Game::GiftExists(){
+    return (gift.x != -1 && gift.y != -1);
+}
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
 
