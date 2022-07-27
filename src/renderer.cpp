@@ -58,7 +58,7 @@ Renderer::~Renderer() {
   TTF_Quit();
 }
 
-void Renderer::Render(Snake const &snake, SDL_Point const &food, SDL_Point const &gift) {
+void Renderer::Render(Game const *game, Snake const &snake, SDL_Point const &food, SDL_Point const &gift) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -94,17 +94,21 @@ void Renderer::Render(Snake const &snake, SDL_Point const &food, SDL_Point const
   // Render gift to destination given by arguments 2-3 with dimensions given by arguments 4-5)
   renderTexture(giftTexture, gift.x * block.w, gift.y * block.h, (screen_width / grid_width), (screen_height / grid_height));
 
-  // Render Text
+  // Render upper left text
   SDL_Color color = { 255, 255, 255 };
-  SDL_Texture* textTexture = renderText("My C++ Snake Game", color);
-  renderTexture(textTexture, 0, 0);
-
+  std::string score_str = "Score: " + std::to_string(game->GetScore());
+  SDL_Texture* scoreTextTexture = renderText(score_str, color);
+  renderTexture(scoreTextTexture, 0, 0);
+  if (game->GiftExists()){
+    SDL_Texture* giftCounterTexture = renderText("Gift counter: ", color);
+    renderTexture(giftCounterTexture, 0, grid_height);
+  }
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
-  std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
+  std::string title{"FPS: " + std::to_string(fps)};
   SDL_SetWindowTitle(sdl_window, title.c_str());
 }
 

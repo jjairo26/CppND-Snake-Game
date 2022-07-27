@@ -28,7 +28,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food, gift);
+    renderer.Render(this, snake, food, gift);
 
     frame_end = SDL_GetTicks();
 
@@ -133,7 +133,7 @@ void Game::EraseGift(){
     gift.y = -1;
 }
 
-bool Game::GiftExists(){
+bool Game::GiftExists() const {
     return (gift.x != -1 && gift.y != -1);
 }
 int Game::GetScore() const { return score; }

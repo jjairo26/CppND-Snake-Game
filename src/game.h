@@ -9,6 +9,8 @@
 #include "renderer.h"
 #include "snake.h"
 
+class Renderer; 
+
 class Game {
  public:
   Game(std::size_t grid_width, std::size_t grid_height);
@@ -16,6 +18,7 @@ class Game {
            std::size_t target_frame_duration);
   int GetScore() const;
   int GetSize() const;
+  bool GiftExists() const;
 
 
  private:
@@ -38,7 +41,6 @@ class Game {
   void Update();
   void PlaceGift();
   void EraseGift();
-  bool GiftExists();
 };
 
 #endif

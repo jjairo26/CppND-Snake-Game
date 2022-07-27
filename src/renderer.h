@@ -6,7 +6,10 @@
 #include "SDL_ttf.h"
 
 #include "snake.h"
+#include "game.h"
 #include <string>
+
+class Game;
 
 class Renderer {
  public:
@@ -14,7 +17,7 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void Render(Snake const &snake, SDL_Point const &food, SDL_Point const &gift);
+  void Render(Game const *game, Snake const &snake, SDL_Point const &food, SDL_Point const &gift);
   void UpdateWindowTitle(int score, int fps);
 
   SDL_Texture* loadTexture(const std::string &file);
