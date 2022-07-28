@@ -95,12 +95,19 @@ void Renderer::Render(Game const *game, Snake const &snake, SDL_Point const &foo
   renderTexture(giftTexture, gift.x * block.w, gift.y * block.h, (screen_width / grid_width), (screen_height / grid_height));
 
   // Render upper left text
-  SDL_Color color = { 255, 255, 255 };
+  SDL_Color white = { 255, 255, 255 };
   std::string score_str = "Score: " + std::to_string(game->GetScore());
-  SDL_Texture* scoreTextTexture = renderText(score_str, color);
+  SDL_Texture* scoreTextTexture = renderText(score_str, white);
   renderTexture(scoreTextTexture, 0, 0);
+  
   if (game->GiftExists()){
-    SDL_Texture* giftCounterTexture = renderText("Gift counter: ", color);
+    //Time left in seconds
+    int giftTimeLeft = (game->GetGiftTimeLimitMS() - game->GetGiftTimePassed())/1000 + 1; 
+    //Render gift countdown
+    std::string giftTime_str = "Gift countdown: " + std::to_string(giftTimeLeft);
+
+    SDL_Color yellow = {233, 252, 20};
+    SDL_Texture* giftCounterTexture = renderText(giftTime_str, yellow);
     renderTexture(giftCounterTexture, 0, grid_height);
   }
   // Update Screen

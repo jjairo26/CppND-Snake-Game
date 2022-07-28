@@ -18,6 +18,8 @@ class Game {
            std::size_t target_frame_duration);
   int GetScore() const;
   int GetSize() const;
+  int GetGiftTimePassed() const;
+  int GetGiftTimeLimitMS() const;
   bool GiftExists() const;
 
 
@@ -25,8 +27,9 @@ class Game {
   Snake snake;
   SDL_Point food;
   SDL_Point gift;
-  int foodCount; // Used for triggering gifts as in Snake2
+  int foodCount{0}; // Used for triggering gifts as in Snake2
   int giftTimeCounter; // Time Counter to make gift disappear
+  int giftTimeLimitMS{5000}; //Maximum time limit for gift in ms
 
   
   std::random_device dev;

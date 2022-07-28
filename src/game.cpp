@@ -138,4 +138,9 @@ bool Game::GiftExists() const {
 }
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
+int Game::GetGiftTimePassed() const {
+   return SDL_GetTicks() - giftTimeCounter; 
+   }
+int Game::GetGiftTimeLimitMS() const { return giftTimeLimitMS; }
+
 
