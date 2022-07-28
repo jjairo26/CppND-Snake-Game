@@ -101,12 +101,18 @@ void Game::Update() {
      foodCount = 0;
      randomCount = random_foodcount(engine); // Generate new random value for count for gift
      snake.speed += 0.02;
+     GiftJustEaten(true);
+     GiftJustEatenTimePoint(SDL_GetTicks());
+  }
+  else
+  {
+    GiftJustEaten(false);
   }
 
   if (GiftExists()){
       int giftPassed = SDL_GetTicks() - giftTimeCounter;
     // Make gift disappear after some time 
-      if (giftPassed >= 5000){ //milliseconds
+      if (giftPassed >= GetGiftTimeLimitMS()){ //milliseconds
         EraseGift();
         foodCount = 0;
     }
@@ -142,5 +148,9 @@ int Game::GetGiftTimePassed() const {
    return SDL_GetTicks() - giftTimeCounter; 
    }
 int Game::GetGiftTimeLimitMS() const { return giftTimeLimitMS; }
+bool Game::GiftJustEaten() const { return giftJustEaten; }
+void Game::GiftJustEaten(bool value) { giftJustEaten = value; }
+int Game::GiftJustEatenTimePoint() const {return giftJustEatenTimePoint;}
+void Game::GiftJustEatenTimePoint(int timepoint) {giftJustEatenTimePoint = timepoint;}
 
 

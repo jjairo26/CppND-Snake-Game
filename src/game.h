@@ -21,6 +21,10 @@ class Game {
   int GetGiftTimePassed() const;
   int GetGiftTimeLimitMS() const;
   bool GiftExists() const;
+  bool GiftJustEaten() const;
+  void GiftJustEaten(bool value);
+  int GiftJustEatenTimePoint() const;
+  void GiftJustEatenTimePoint(int timepoint);
 
 
  private:
@@ -30,7 +34,8 @@ class Game {
   int foodCount{0}; // Used for triggering gifts as in Snake2
   int giftTimeCounter; // Time Counter to make gift disappear
   int giftTimeLimitMS{5000}; //Maximum time limit for gift in ms
-
+  bool giftJustEaten {false}; //Flag whether gift was just eaten
+  int giftJustEatenTimePoint {INT32_MAX}; //Big value to avoid color change as if the gift had been eaten recently
   
   std::random_device dev;
   std::mt19937 engine;

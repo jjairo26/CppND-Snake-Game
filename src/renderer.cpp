@@ -86,6 +86,10 @@ void Renderer::Render(Game const *game, Snake const &snake, SDL_Point const &foo
   block.y = static_cast<int>(snake.head_y) * block.h;
   if (snake.alive) {
     SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
+    //Feedback for gift eating:
+    //If gift just eaten or less than 1 second has passed since it was eaten
+    if (game->GiftJustEaten() == true || (SDL_GetTicks() - game->GiftJustEatenTimePoint()) <= 1000)
+      SDL_SetRenderDrawColor(sdl_renderer, 0xE9, 0xFC, 0x14, 0xFF);
   } else {
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
   }
