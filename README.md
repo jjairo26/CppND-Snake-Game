@@ -28,11 +28,11 @@ On a more technical side, the renderer class has been extended to allow for PNG 
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
 * SDL2-TTF >= 2.0 (for font rendering)
-  * Linux: `sudo apt-get install sdl2-ttf-dev`
+  * Linux: `sudo apt-get install libsdl2-ttf-dev`
   * MacOS: Download from [the GitHub repo](https://github.com/libsdl-org/SDL_ttf/releases) and install e.g. by following [this](https://www.youtube.com/watch?v=GROeu4fL730) video
   * Windows: Download from [the GitHub repo](https://github.com/libsdl-org/SDL_ttf/releases) and install e.g. by following [this](https://www.youtube.com/watch?v=9Ca-RVPwnBE) video
 * SDL2-Image >= 2.0 (for PNG image rendering)
-  * Linux: `sudo apt-get install sdl2-image-dev`
+  * Linux: `sudo apt-get install libsdl2-image-dev`
   * MacOS: Download from [the GitHub repo](https://github.com/libsdl-org/SDL_image). Or use [MacPorts](https://ports.macports.org/port/libsdl2_image/).
   * Windows: Download from [the GitHub repo](https://github.com/libsdl-org/SDL_image) and install e.g. by following [this](https://www.youtube.com/watch?v=YrWQsuDT3NE) video
 
