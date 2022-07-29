@@ -144,6 +144,7 @@ void Game::PlaceGift() {
     }
   }
 }
+<<<<<<< HEAD
 
 /**
  *  \brief Erases the gift by setting a position which is rendered outside the window
@@ -151,3 +152,5 @@ void Game::PlaceGift() {
 void Game::EraseGift(){
     gift.SetPosition(-1,-1);
 }
+=======
+>>>>>>> e7fea9214ed3688c05b1c669c18a2ba3e2e729e4
