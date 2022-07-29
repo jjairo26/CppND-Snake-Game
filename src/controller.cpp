@@ -3,12 +3,18 @@
 #include "SDL.h"
 #include "snake.h"
 
+/**
+ *  \brief Change direction of the snake as long as it is not opposite to the current direction. Exception: Snake size is 1.
+ */
 void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
                                  Snake::Direction opposite) const {
   if (snake.direction != opposite || snake.size == 1) snake.direction = input;
   return;
 }
 
+/**
+ *  \brief Handle User Input
+ */
 void Controller::HandleInput(bool &running, Snake &snake) const {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {

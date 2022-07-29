@@ -12,6 +12,9 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
   randomCount = random_foodcount(engine);
 }
 
+/**
+ *  \brief Runs the game with a while-loop
+ */
 void Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
@@ -38,7 +41,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(score, frame_count);
+      renderer.UpdateWindowTitle(frame_count);
       frame_count = 0;
       title_timestamp = frame_end;
     }
@@ -52,6 +55,9 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
+/**
+ *  \brief Places food in a random position
+ */
 void Game::PlaceFood() {
   int x, y;
   while (true) {
@@ -67,7 +73,9 @@ void Game::PlaceFood() {
   }
 }
 
-
+/**
+ *  \brief Updates the state of the game depending on the snake position and time
+ */
 void Game::Update() {
   if (!snake.alive) return;
 
@@ -87,7 +95,6 @@ void Game::Update() {
     snake.speed += 0.02;
   }
   
-  //std::cout << "RandomCount: " << randomCount << "\n";
   if ((foodCount%randomCount == 0) && foodCount != 0 && !gift.Exists()){
     // new gift position
      PlaceGift();
@@ -121,7 +128,9 @@ void Game::Update() {
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
 
-
+/**
+ *  \brief Places the gift in a random position
+ */
 void Game::PlaceGift() {
   int x, y;
   while (true) {
@@ -135,22 +144,3 @@ void Game::PlaceGift() {
     }
   }
 }
-
-void Game::EraseGift(){
-    gift.SetPosition(-1,-1);
-}
-
-/*bool Game::GiftExists() const {
-    return (gift.x != -1 && gift.y != -1);
-}
-
-int Game::GetGiftTimePassed() const {
-   return SDL_GetTicks() - giftTimeCounter; 
-   }
-int Game::GetGiftTimeLimitMS() const { return giftTimeLimitMS; }
-bool Game::GiftJustEaten() const { return giftJustEaten; }
-void Game::GiftJustEaten(bool value) { giftJustEaten = value; }
-int Game::GiftJustEatenTimePoint() const {return giftJustEatenTimePoint;}
-void Game::GiftJustEatenTimePoint(int timepoint) {giftJustEatenTimePoint = timepoint;}
-*/
-
