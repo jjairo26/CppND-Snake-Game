@@ -31,13 +31,10 @@ private:
 
     SDL_Point giftPosition;
 
-    std::uniform_int_distribution<int> random_foodcount; //if reaches randomCount: gift appearance  
-    int randomCount; //Values between 5 and 7, for gift appearance, see constructor
-
     int timeCounter; // Time Counter to make gift disappear
-    int timeLimitMS{5000}; //Maximum time limit for gift in ms
-    bool justEaten {false}; //Flag whether gift was just eaten
-    int justEatenTimePoint {INT32_MAX}; //Big value to avoid color change in the beginning, as if the gift had been eaten recently
+    int timeLimitMS; //Maximum time limit for gift in ms
+    bool justEaten; //Flag whether gift was just eaten
+    int justEatenTimePoint; //Big value (See initializer list) to avoid color change in the beginning, as if the gift had been eaten recently
 
 };
 

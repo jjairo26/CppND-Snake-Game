@@ -1,6 +1,6 @@
 #include "gift.h"
 
-Gift::Gift(){
+Gift::Gift() : timeCounter(0), timeLimitMS(5000), justEaten(false), justEatenTimePoint(INT32_MAX){
     // Default Position(x = -1, y = -1) encode a non-available gift
     SetPosition(-1,-1);
 };
