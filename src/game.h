@@ -2,12 +2,12 @@
 #define GAME_H
 
 #include <random>
-//#include <ctime>
 #include "SDL.h"
 #include "SDL_image.h"
 #include "controller.h"
 #include "renderer.h"
 #include "snake.h"
+#include "gift.h"
 
 class Renderer; 
 
@@ -18,24 +18,12 @@ class Game {
            std::size_t target_frame_duration);
   int GetScore() const;
   int GetSize() const;
-  int GetGiftTimePassed() const;
-  int GetGiftTimeLimitMS() const;
-  bool GiftExists() const;
-  bool GiftJustEaten() const;
-  void GiftJustEaten(bool value);
-  int GiftJustEatenTimePoint() const;
-  void GiftJustEatenTimePoint(int timepoint);
-
 
  private:
   Snake snake;
   SDL_Point food;
-  SDL_Point gift;
-  int foodCount{0}; // Used for triggering gifts as in Snake2
-  int giftTimeCounter; // Time Counter to make gift disappear
-  int giftTimeLimitMS{5000}; //Maximum time limit for gift in ms
-  bool giftJustEaten {false}; //Flag whether gift was just eaten
-  int giftJustEatenTimePoint {INT32_MAX}; //Big value to avoid color change as if the gift had been eaten recently
+  Gift gift;
+  int foodCount{0}; 
   
   std::random_device dev;
   std::mt19937 engine;

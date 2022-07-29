@@ -7,6 +7,7 @@
 
 #include "snake.h"
 #include "game.h"
+#include "gift.h"
 #include <string>
 
 class Game;
@@ -17,13 +18,14 @@ class Renderer {
            const std::size_t grid_width, const std::size_t grid_height);
   ~Renderer();
 
-  void Render(Game const *game, Snake const &snake, SDL_Point const &food, SDL_Point const &gift);
+  void Render(Game const *game, Snake const &snake, SDL_Point const &food, Gift const &gift);
   void UpdateWindowTitle(int score, int fps);
 
-  SDL_Texture* loadTexture(const std::string &file);
-  void renderTexture(SDL_Texture *texture, int x, int y, int w, int h);
-  void renderTexture(SDL_Texture *tex, int x, int y);
-  SDL_Texture* renderText(const std::string &message,	SDL_Color color);
+  //Further SDL Helper functions
+  SDL_Texture* LoadTexture(const std::string &file);
+  void RenderTexture(SDL_Texture *texture, int x, int y, int w, int h);
+  void RenderTexture(SDL_Texture *tex, int x, int y);
+  SDL_Texture* RenderText(const std::string &message,	SDL_Color color);
 
 
  private:

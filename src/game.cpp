@@ -6,8 +6,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
-      random_h(0, static_cast<int>(grid_height - 1)), gift{-1,-1}, random_foodcount(5,7){
-        // gift.x = -1, gift.y = -1 encode a non-available gift
+      random_h(0, static_cast<int>(grid_height - 1)), gift(), random_foodcount(5,7){
         // random_foodcount: every 5 to 7 foods: gift
   PlaceFood();
   randomCount = random_foodcount(engine);
@@ -89,35 +88,39 @@ void Game::Update() {
   }
   
   //std::cout << "RandomCount: " << randomCount << "\n";
-  if ((foodCount%randomCount == 0) && foodCount != 0 && !GiftExists()){
+  if ((foodCount%randomCount == 0) && foodCount != 0 && !gift.Exists()){
     // new gift position
      PlaceGift();
-     giftTimeCounter = SDL_GetTicks();
+     gift.SetTimeCounter(SDL_GetTicks());
   }
   // Check if snake has reached the gift
-  if (gift.x == new_x && gift.y == new_y){
+  if (gift.GetPosition().x == new_x && gift.GetPosition().y == new_y){
      score += 5;
      EraseGift();
      foodCount = 0;
      randomCount = random_foodcount(engine); // Generate new random value for count for gift
      snake.speed += 0.02;
-     GiftJustEaten(true);
-     GiftJustEatenTimePoint(SDL_GetTicks());
+     gift.JustEaten(true);
+     gift.JustEatenTimePoint(SDL_GetTicks());
   }
   else
   {
-    GiftJustEaten(false);
+    gift.JustEaten(false);
   }
 
-  if (GiftExists()){
-      int giftPassed = SDL_GetTicks() - giftTimeCounter;
+  if (gift.Exists()){
+      int giftPassed = SDL_GetTicks() - gift.GetTimeCounter();
     // Make gift disappear after some time 
-      if (giftPassed >= GetGiftTimeLimitMS()){ //milliseconds
+      if (giftPassed >= gift.GetTimeLimitMS()){ //milliseconds
         EraseGift();
         foodCount = 0;
     }
   }
 }
+
+int Game::GetScore() const { return score; }
+int Game::GetSize() const { return snake.size; }
+
 
 void Game::PlaceGift() {
   int x, y;
@@ -127,23 +130,20 @@ void Game::PlaceGift() {
     // Check that the location is not occupied by a snake item before placing
     // Gift.
     if (!snake.SnakeCell(x, y)) {
-      gift.x = x;
-      gift.y = y;
+      gift.SetPosition(x,y);
       return;
     }
   }
 }
 
 void Game::EraseGift(){
-    gift.x = -1;
-    gift.y = -1;
+    gift.SetPosition(-1,-1);
 }
 
-bool Game::GiftExists() const {
+/*bool Game::GiftExists() const {
     return (gift.x != -1 && gift.y != -1);
 }
-int Game::GetScore() const { return score; }
-int Game::GetSize() const { return snake.size; }
+
 int Game::GetGiftTimePassed() const {
    return SDL_GetTicks() - giftTimeCounter; 
    }
@@ -152,5 +152,5 @@ bool Game::GiftJustEaten() const { return giftJustEaten; }
 void Game::GiftJustEaten(bool value) { giftJustEaten = value; }
 int Game::GiftJustEatenTimePoint() const {return giftJustEatenTimePoint;}
 void Game::GiftJustEatenTimePoint(int timepoint) {giftJustEatenTimePoint = timepoint;}
-
+*/
 

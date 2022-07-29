@@ -40,7 +40,7 @@ Renderer::Renderer(const std::size_t screen_width,
 
   //Load gift PNG as texture
   std::string giftPNGpath = "../res/gift.png";
-  giftTexture = loadTexture(giftPNGpath); 
+  giftTexture = LoadTexture(giftPNGpath); 
 
   //Initialize Font Library
   TTF_Init();
@@ -58,10 +58,12 @@ Renderer::~Renderer() {
   TTF_Quit();
 }
 
-void Renderer::Render(Game const *game, Snake const &snake, SDL_Point const &food, SDL_Point const &gift) {
+void Renderer::Render(Game const *game, Snake const &snake, SDL_Point const &food, Gift const &gift) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
+  SDL_Color white = { 255, 255, 255 };
+  SDL_Color yellow = {233, 252, 20};
 
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
@@ -88,31 +90,34 @@ void Renderer::Render(Game const *game, Snake const &snake, SDL_Point const &foo
     SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
     //Feedback for gift eating:
     //If gift just eaten or less than 1 second has passed since it was eaten
-    if (game->GiftJustEaten() == true || (SDL_GetTicks() - game->GiftJustEatenTimePoint()) <= 1000)
+    if (gift.JustEaten() == true || (SDL_GetTicks() - gift.JustEatenTimePoint()) <= 1000)
       SDL_SetRenderDrawColor(sdl_renderer, 0xE9, 0xFC, 0x14, 0xFF);
-  } else {
+  } else { //Game Over
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_Texture* gameOverTexture = RenderText("Game Over", white);
+    //Needed for rendering in the exact center
+    SDL_Rect dst;
+    SDL_QueryTexture(gameOverTexture, NULL, NULL, &dst.w, &dst.h);
+    RenderTexture(gameOverTexture, screen_width/2 - dst.w/2, screen_height/2 - dst.h/2);
   }
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // Render gift to destination given by arguments 2-3 with dimensions given by arguments 4-5)
-  renderTexture(giftTexture, gift.x * block.w, gift.y * block.h, (screen_width / grid_width), (screen_height / grid_height));
+  RenderTexture(giftTexture, gift.GetPosition().x * block.w, gift.GetPosition().y * block.h, (screen_width / grid_width), (screen_height / grid_height));
 
   // Render upper left text
-  SDL_Color white = { 255, 255, 255 };
   std::string score_str = "Score: " + std::to_string(game->GetScore());
-  SDL_Texture* scoreTextTexture = renderText(score_str, white);
-  renderTexture(scoreTextTexture, 0, 0);
+  SDL_Texture* scoreTextTexture = RenderText(score_str, white);
+  RenderTexture(scoreTextTexture, 0, 0);
   
-  if (game->GiftExists()){
+  if (gift.Exists() && snake.alive){
     //Time left in seconds
-    int giftTimeLeft = (game->GetGiftTimeLimitMS() - game->GetGiftTimePassed())/1000 + 1; 
+    int giftTimeLeft = (gift.GetTimeLimitMS() - gift.GetTimeSinceCreation())/1000 + 1; 
     //Render gift countdown
     std::string giftTime_str = "Gift countdown: " + std::to_string(giftTimeLeft);
 
-    SDL_Color yellow = {233, 252, 20};
-    SDL_Texture* giftCounterTexture = renderText(giftTime_str, yellow);
-    renderTexture(giftCounterTexture, 0, grid_height);
+    SDL_Texture* giftCounterTexture = RenderText(giftTime_str, yellow);
+    RenderTexture(giftCounterTexture, 0, grid_height);
   }
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
@@ -123,7 +128,7 @@ void Renderer::UpdateWindowTitle(int score, int fps) {
   SDL_SetWindowTitle(sdl_window, title.c_str());
 }
 
-SDL_Texture* Renderer::loadTexture(const std::string &file){
+SDL_Texture* Renderer::LoadTexture(const std::string &file){
 	SDL_Texture *texture = IMG_LoadTexture(sdl_renderer, file.c_str());
 	if (texture == nullptr){
 		std::cerr << "Texture could not be loaded.\n";
@@ -132,7 +137,7 @@ SDL_Texture* Renderer::loadTexture(const std::string &file){
 	return texture;
 }
 
-void Renderer::renderTexture(SDL_Texture *texture, int x, int y, int w, int h){
+void Renderer::RenderTexture(SDL_Texture *texture, int x, int y, int w, int h){
 	//Setup the destination rectangle position
 	SDL_Rect dst;
 	dst.x = x;
@@ -142,7 +147,7 @@ void Renderer::renderTexture(SDL_Texture *texture, int x, int y, int w, int h){
 	SDL_RenderCopy(sdl_renderer, texture, NULL, &dst);
 }
 
-void Renderer::renderTexture(SDL_Texture *tex, int x, int y){
+void Renderer::RenderTexture(SDL_Texture *tex, int x, int y){
 	//Setup the destination rectangle
 	SDL_Rect dst;
 	dst.x = x;
@@ -152,7 +157,7 @@ void Renderer::renderTexture(SDL_Texture *tex, int x, int y){
 	SDL_RenderCopy(sdl_renderer, tex, NULL, &dst);
 }
 
-SDL_Texture* Renderer::renderText(const std::string &message,	SDL_Color color)
+SDL_Texture* Renderer::RenderText(const std::string &message,	SDL_Color color)
 {
 	//TTF_RenderText -> Surface -> Texture
 	SDL_Surface *surf = TTF_RenderText_Solid(font, message.c_str(), color);
