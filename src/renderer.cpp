@@ -2,6 +2,9 @@
 #include <iostream>
 #include <string>
 
+/**
+ *  \brief Constructor which initializes SDL, SDL_Image and SDL_Fonts
+ */
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
                    const std::size_t grid_width, const std::size_t grid_height)
@@ -58,6 +61,9 @@ Renderer::~Renderer() {
   TTF_Quit();
 }
 
+/**
+ *  \brief Renders screen, food, snake, gift, and text
+ */
 void Renderer::Render(Game const *game, Snake const &snake, SDL_Point const &food, Gift const &gift) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
@@ -123,11 +129,17 @@ void Renderer::Render(Game const *game, Snake const &snake, SDL_Point const &foo
   SDL_RenderPresent(sdl_renderer);
 }
 
-void Renderer::UpdateWindowTitle(int score, int fps) {
+/**
+ *  \brief Updates the text in the window title with the current FPS value
+ */
+void Renderer::UpdateWindowTitle(int fps) {
   std::string title{"FPS: " + std::to_string(fps)};
   SDL_SetWindowTitle(sdl_window, title.c_str());
 }
 
+/**
+ *  \brief Helper function to load a texture from an image
+ */
 SDL_Texture* Renderer::LoadTexture(const std::string &file){
 	SDL_Texture *texture = IMG_LoadTexture(sdl_renderer, file.c_str());
 	if (texture == nullptr){
@@ -137,6 +149,9 @@ SDL_Texture* Renderer::LoadTexture(const std::string &file){
 	return texture;
 }
 
+/**
+ *  \brief Renders a texture with given position and dimensions
+ */
 void Renderer::RenderTexture(SDL_Texture *texture, int x, int y, int w, int h){
 	//Setup the destination rectangle position
 	SDL_Rect dst;
@@ -147,6 +162,9 @@ void Renderer::RenderTexture(SDL_Texture *texture, int x, int y, int w, int h){
 	SDL_RenderCopy(sdl_renderer, texture, NULL, &dst);
 }
 
+/**
+ *  \brief Renders a texture with a given position and dimensions intrinsic to the texture itself
+ */
 void Renderer::RenderTexture(SDL_Texture *tex, int x, int y){
 	//Setup the destination rectangle
 	SDL_Rect dst;
@@ -157,6 +175,9 @@ void Renderer::RenderTexture(SDL_Texture *tex, int x, int y){
 	SDL_RenderCopy(sdl_renderer, tex, NULL, &dst);
 }
 
+/**
+ *  \brief Renders a string with selected color
+ */
 SDL_Texture* Renderer::RenderText(const std::string &message,	SDL_Color color)
 {
 	//TTF_RenderText -> Surface -> Texture
@@ -172,6 +193,4 @@ SDL_Texture* Renderer::RenderText(const std::string &message,	SDL_Color color)
 	//Clean up the surface and font
 	SDL_FreeSurface(surf);
 	return texture;
-	//SDL_RenderCopy(sdl_renderer, texture, NULL, NULL);
-
 }

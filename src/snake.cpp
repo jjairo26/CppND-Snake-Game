@@ -2,6 +2,9 @@
 #include <cmath>
 #include <iostream>
 
+/**
+ *  \brief Update Snake position
+ */
 void Snake::Update() {
   SDL_Point prev_cell{
       static_cast<int>(head_x),
@@ -19,6 +22,9 @@ void Snake::Update() {
   }
 }
 
+/**
+ *  \brief Update head position based on speed
+ */
 void Snake::UpdateHead() {
   switch (direction) {
     case Direction::kUp:
@@ -43,6 +49,9 @@ void Snake::UpdateHead() {
   head_y = fmod(head_y + grid_height, grid_height);
 }
 
+/**
+ *  \brief Updates body position by removing the tail and turning the previous head to a body part
+ */
 void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) {
   // Add previous head location to vector
   body.push_back(prev_head_cell);
@@ -63,9 +72,14 @@ void Snake::UpdateBody(SDL_Point &current_head_cell, SDL_Point &prev_head_cell) 
   }
 }
 
+/**
+ *  \brief Flag for growing the snake body
+ */
 void Snake::GrowBody() { growing = true; }
 
-// Inefficient method to check if cell is occupied by snake.
+/**
+ *  \brief Inefficient method to check if cell is occupied by snake.
+ */
 bool Snake::SnakeCell(int x, int y) {
   if (x == static_cast<int>(head_x) && y == static_cast<int>(head_y)) {
     return true;

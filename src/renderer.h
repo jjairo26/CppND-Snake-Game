@@ -19,7 +19,7 @@ class Renderer {
   ~Renderer();
 
   void Render(Game const *game, Snake const &snake, SDL_Point const &food, Gift const &gift);
-  void UpdateWindowTitle(int score, int fps);
+  void UpdateWindowTitle(int fps);
 
   //Further SDL Helper functions
   SDL_Texture* LoadTexture(const std::string &file);
